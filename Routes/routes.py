@@ -25,10 +25,11 @@ class login(Resource):
 
     def post(self):
         print("Post called")
-        usr = request.form['username']
-        passw = request.form['password']
-        print(usr)
-        print(passw)
-        t = User(usr, passw)
         headers = {"Content-Type": "text/html"}
         return make_response("Login successful", headers)
+
+
+class example(Resource):
+    @jwt_required()
+    def get(self):
+        return "User is logged in"

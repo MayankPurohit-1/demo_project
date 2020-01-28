@@ -1,27 +1,19 @@
-from werkzeug.security import safe_str_cmp
 from Database.connection import ConnectionModel
+from Model.UserModel import User
+from bson import ObjectId
 
 
 class SecurityModel:
-    user_collection = ConnectionModel.connect('user_collection')
-
     @staticmethod
     def authenticate(username, password):
-        temp = SecurityModel.user_collection.find_one({"username": username})
-        print(temp)
-        if temp and safe_str_cmp(temp['password'], password):
-            print("Called")
-            return temp
-        # usrname = request.form['username']
-        # passwd = request.form['password']
-        # data = request.get_json()
-        # if usrname == temp['username'] and passwd == temp['password']:
-        # if data['username'] == temp['username'] and data['password'] == temp['password']:
-        #     return temp
+        user = ConnectionModel.connect("user_collection").find_one({"username": username, "password": password})
+        n = User(str(user['_id']), user['username'], user['password'])
+        print(type(n))
+        return n
 
     @staticmethod
     def identity(payload):
-        temp_user = payload['identity']
-        print(temp_user)
-        print("Identity called")
-        return SecurityModel.user_collection.find_one({"username": temp_user})
+        user_id = payload['identity']
+        result = ConnectionModel.connect("user_collection").find_one({"_id": ObjectId(user_id)})
+        n = User(str(result['_id']), result['username'], result['password'])
+        return n
