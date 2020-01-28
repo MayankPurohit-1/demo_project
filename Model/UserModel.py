@@ -2,8 +2,10 @@ from Database.connection import ConnectionModel
 
 
 class User:
-    def __init__(self):
+    def __init__(self, username, password):
         self.user_collection = ConnectionModel.connect('user_collection')
+        self.username = username
+        self.password = password
 
     def userRegistration(self, name, username, password):
         result = self.user_collection.count({'username': username})
