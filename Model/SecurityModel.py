@@ -10,6 +10,7 @@ class SecurityModel:
         temp = SecurityModel.user_collection.find_one({"username": username})
         print(temp)
         if temp and safe_str_cmp(temp['password'], password):
+            print("Called")
             return temp
         # usrname = request.form['username']
         # passwd = request.form['password']
@@ -21,4 +22,6 @@ class SecurityModel:
     @staticmethod
     def identity(payload):
         temp_user = payload['identity']
+        print(temp_user)
+        print("Identity called")
         return SecurityModel.user_collection.find_one({"username": temp_user})
